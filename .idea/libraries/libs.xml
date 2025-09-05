@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/New_Smart_ECG_Ring/demo/YCBleSdkDemo/app/libs/rtk-core-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/New_Smart_ECG_Ring/demo/YCBleSdkDemo/app/libs/rtk-bbpro-core-1.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/New_Smart_ECG_Ring/demo/YCBleSdkDemo/app/libs/rtk-dfu-3.3.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
