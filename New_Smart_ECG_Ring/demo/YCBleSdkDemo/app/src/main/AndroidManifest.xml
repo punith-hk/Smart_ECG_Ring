@@ -53,6 +53,9 @@
         <activity android:name=".upgrade.auto.AutoFirmwareUpgradeActivity" />
         <activity android:name=".upgrade.auto.AutoFactoryActivity" />
 
+        <activity android:name=".ui.activities.LoginActivity" />
+        <activity android:name=".HomeActivity" />
+
         <receiver
             android:name=".phone.PhoneReceiver"
             android:enabled="true"
