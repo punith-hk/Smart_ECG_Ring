@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YC_Tools</string>
+    <string name="app_name">MannaHealPro</string>
 
     <string name="rtk_dfu_file_size">%d bytes</string>
     <string name="rtk_dfu_detail_file_info_sub_file_type">Type:</string>

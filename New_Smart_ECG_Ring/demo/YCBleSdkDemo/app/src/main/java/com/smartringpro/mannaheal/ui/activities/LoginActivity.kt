@@ -11,7 +11,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val loginButton = findViewById<Button>(R.id.btn_login)
+        val loginButton = findViewById<Button>(R.id.btnSubmit)
         loginButton.setOnClickListener {
             val intent = Intent(this, com.smartringpro.mannaheal.HomeActivity::class.java)
             startActivity(intent)
