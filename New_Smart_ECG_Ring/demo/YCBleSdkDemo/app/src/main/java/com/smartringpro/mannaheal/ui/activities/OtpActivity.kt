@@ -6,14 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import com.smartringpro.mannaheal.R
 
-class LoginActivity : AppCompatActivity() {
+class OtpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_otp)
 
-        val loginButton = findViewById<Button>(R.id.btnSubmit)
-        loginButton.setOnClickListener {
-            val intent = Intent(this, com.smartringpro.mannaheal.ui.activities.OtpActivity::class.java)
+        val submitButton = findViewById<Button>(R.id.btnSubmit)
+        submitButton.setOnClickListener {
+            val intent = Intent(this, com.smartringpro.mannaheal.HomeActivity::class.java)
             startActivity(intent)
             finish()
         }

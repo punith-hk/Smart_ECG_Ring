@@ -61,8 +61,7 @@ import java.util.TimeZone;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-
-// ...existing imports from HomeActivity.java...
+import com.smartringpro.mannaheal.R;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
     private final static String TAG = HomeActivity.class.getSimpleName();
@@ -139,7 +138,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
         EventBus.getDefault().register(this);
 
@@ -231,7 +230,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //                    runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
-////                            Toast.makeText(HomeActivity.this, "main=" + i, Toast.LENGTH_SHORT).show();
+////                            Toast.makeText(HomeActivity.this, "main=" + i, Toast.LENGTH_SHORT).show;
 //                            baseOrderSet();
 //                        }
 //                    });
@@ -566,7 +565,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 closeRealTemp();
                 break;
             case R.id.send_message:
-                YCBTClient.appSengMessageToDevice(0x03, "ทานยาก่อนอาหาร", "ตัวอย่าง: เพนิซิลลิน 1 เม็ด, พาราเซตามอล 10 เม็ด", new BleDataResponse() {//วันนี้มีนัดพบคุณหมอนะครับ  รพ.น้ำหนึ่งวิญญู 16:00:00
+                YCBTClient.appSengMessageToDevice(0x03, "ทานยาก่อนอาหาร", "���ัวอย่าง: เพนิซิล���ิน 1 เม็ด, พาราเซตามอล 10 เม็ด", new BleDataResponse() {//วันนี้มีนัดพบคุณหมอนะครับ  รพ.น้ำหนึ่งวิญญู 16:00:00
                     @Override
                     public void onDataResponse(int i, float v, HashMap hashMap) {
                         if (i == 0) {
@@ -822,7 +821,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
      * 模式  0x00：设置为正常工作模式采集配置  0x01:设置为关怀工作模式采集配置  0x02：设置为省电工作模式采集配置  0x03:设置运动模式下采集配置
      * 数据类型 0x00:PPG,  0x01:六轴,  0x02：ECG,  0x03：温湿度,  0x04：环境光,  0x05：体温,  0x06：心率
      * 每次采集时长（单位： 秒）（关闭时填 0）
-     * 采集间隔(单位：分钟) （关闭时填 0）
+     * 采集间隔(单位：��钟) （关闭时填 0）
      */
     private void setInvertTime() {
         showDialog();
