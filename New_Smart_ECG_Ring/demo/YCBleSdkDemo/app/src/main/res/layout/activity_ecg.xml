@@ -5,7 +5,7 @@
     android:background="#F0F0F0"
     android:orientation="vertical">
 
-    <com.example.ycblesdkdemo.view.NavigationBar
+    <com.smartringpro.mannaheal.view.NavigationBar
         android:id="@+id/navigationbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -23,7 +23,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
-            <com.example.ycblesdkdemo.ecg.view.Cardiograph2View
+            <com.smartringpro.mannaheal.ecg.view.Cardiograph2View
                 android:id="@+id/cardiograph2View"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

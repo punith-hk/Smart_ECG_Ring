@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:background="@color/white_color">
 
-        <com.example.ycblesdkdemo.view.NavigationBar
+        <com.smartringpro.mannaheal.view.NavigationBar
             android:id="@+id/navigationbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -116,11 +116,11 @@
             android:layout_height="0dp"
             android:layout_weight="5">
 
-            <com.example.ycblesdkdemo.ecg.view.CarBgView
+            <com.smartringpro.mannaheal.ecg.view.CarBgView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <com.example.ycblesdkdemo.ecg.view.CardiographView4
+            <com.smartringpro.mannaheal.ecg.view.CardiographView4
                 android:id="@+id/cardiographView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

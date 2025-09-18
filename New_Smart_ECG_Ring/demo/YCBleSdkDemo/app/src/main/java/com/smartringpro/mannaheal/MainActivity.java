@@ -1,0 +1,17 @@
+package com.smartringpro.mannaheal;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // No UI, just navigate to LoginActivity
+        Intent intent = new Intent(this, com.smartringpro.mannaheal.ui.activities.LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+}
