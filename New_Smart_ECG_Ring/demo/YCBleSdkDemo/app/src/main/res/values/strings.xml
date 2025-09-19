@@ -1,6 +1,21 @@
 <resources>
     <string name="app_name">MannaHealPro</string>
 
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="device_binding">Device Binding</string>
+    <string name="this_is_a_cardview">This is a CardView</string>
+    <string name="scanning_in_progress_text">Scanning in progress</string>
+    <string name="searching_device_text">Searching for available devices...</string>
+    <string name="scan_again">Re Scan</string>
+    <string name="mannaheal">MannaHeal</string>
+    <string name="smart_ring">SmartRing</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="connected">Connected</string>
+    <string name="low">Low</string>
+    <string name="firmware_version">firmware hardware version : ..</string>
+
     <string name="rtk_dfu_file_size">%d bytes</string>
     <string name="rtk_dfu_detail_file_info_sub_file_type">Type:</string>
     <string name="rtk_dfu_detail_file_info_sub_file_version">Version:</string>

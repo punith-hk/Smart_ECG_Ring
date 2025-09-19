@@ -13,7 +13,7 @@ class OtpActivity : AppCompatActivity() {
 
         val submitButton = findViewById<Button>(R.id.btnSubmit)
         submitButton.setOnClickListener {
-            val intent = Intent(this, com.smartringpro.mannaheal.HomeActivity::class.java)
+            val intent = Intent(this, com.smartringpro.mannaheal.ui.activities.DeviceActivity::class.java)
             startActivity(intent)
             finish()
         }

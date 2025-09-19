@@ -53,9 +53,14 @@
         <activity android:name=".upgrade.auto.AutoFirmwareUpgradeActivity" />
         <activity android:name=".upgrade.auto.AutoFactoryActivity" />
 
-        <activity android:name=".ui.activities.LoginActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".ui.activities.OtpActivity" />
+        <activity android:name=".ui.activities.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activities.OtpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activities.DeviceActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".phone.PhoneReceiver"
