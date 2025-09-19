@@ -32,7 +32,7 @@ public class MyApplication extends Application {
         super.onCreate();
         String currentProcessName = getCurProcessName(this);
 
-        if ("com.example.ycblesdkdemo".equals(currentProcessName)) {
+        if ("com.smartringpro.mannaheal".equals(currentProcessName)) {
             Log.e("device", "...onCreate.....");
             instance = this;
             YCBTClient.initClient(this, true);
