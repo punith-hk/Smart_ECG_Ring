@@ -63,15 +63,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import com.smartringpro.mannaheal.R;
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
-    private final static String TAG = HomeActivity.class.getSimpleName();
+public class BleHelperActivity extends AppCompatActivity implements View.OnClickListener {
+    private final static String TAG = BleHelperActivity.class.getSimpleName();
     private int invertTime = 10;
     private ProgressDialog progressDialog;
     private ListView listView;
 
     private List<ScanDeviceBean> listModel = new ArrayList<>();
     private List<String> listVal = new ArrayList<>();
-    DeviceAdapter deviceAdapter = new DeviceAdapter(HomeActivity.this, listModel);
+    DeviceAdapter deviceAdapter = new DeviceAdapter(BleHelperActivity.this, listModel);
 
     private AITools aiTools;
 
@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onDataResponse(int i, float v, HashMap hashMap) {
                         if (hashMap != null) {
-                            HomeActivity.this.runOnUiThread(new Runnable() {
+                            BleHelperActivity.this.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     ((TextView) findViewById(R.id.tv_get_real)).setText(hashMap.toString());
@@ -102,21 +102,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 showDialog();
             } else if (msg.what == 2) {
                 dissmissDialog();
-                Toast.makeText(HomeActivity.this, "没有历史数据", Toast.LENGTH_LONG).show();
+                Toast.makeText(BleHelperActivity.this, "没有历史数据", Toast.LENGTH_LONG).show();
             } else if (msg.what == 3) {
-                Toast.makeText(HomeActivity.this, "同步失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(BleHelperActivity.this, "同步失败", Toast.LENGTH_LONG).show();
                 dissmissDialog();
             } else if (msg.what == 4) {
-                Toast.makeText(HomeActivity.this, "同步成功", Toast.LENGTH_LONG).show();
+                Toast.makeText(BleHelperActivity.this, "同步成功", Toast.LENGTH_LONG).show();
                 dissmissDialog();
             } else if (msg.what == 5) {
-                Toast.makeText(HomeActivity.this, "升级成功", Toast.LENGTH_LONG).show();
+                Toast.makeText(BleHelperActivity.this, "升级成功", Toast.LENGTH_LONG).show();
                 dissmissDialog();
             } else if (msg.what == 6) {
-                Toast.makeText(HomeActivity.this, "升级失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(BleHelperActivity.this, "升级失败", Toast.LENGTH_LONG).show();
                 dissmissDialog();
             } else if (msg.what == 10) {
-                Toast.makeText(HomeActivity.this, "完成", Toast.LENGTH_LONG).show();
+                Toast.makeText(BleHelperActivity.this, "完成", Toast.LENGTH_LONG).show();
                 dissmissDialog();
             }
             return false;
@@ -124,13 +124,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     });
 
     private void showDialog() {
-        if (!HomeActivity.this.isFinishing() && progressDialog != null && !progressDialog.isShowing()) {
+        if (!BleHelperActivity.this.isFinishing() && progressDialog != null && !progressDialog.isShowing()) {
             progressDialog.show();
         }
     }
 
     private void dissmissDialog() {
-        if (!HomeActivity.this.isFinishing() && progressDialog != null && progressDialog.isShowing()) {
+        if (!BleHelperActivity.this.isFinishing() && progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }
@@ -138,7 +138,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_ble_helper);
 
         EventBus.getDefault().register(this);
 
@@ -216,7 +216,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-//        String defaultMac = (String) SPHelper.get(HomeActivity.this, "key", "no");
+//        String defaultMac = (String) SPHelper.get(BleHelperActivity.this, "key", "no");
 //
 //        if (!defaultMac.equals("no")) {
 //
@@ -230,7 +230,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //                    runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {
-////                            Toast.makeText(HomeActivity.this, "main=" + i, Toast.LENGTH_SHORT).show;
+////                            Toast.makeText(BleHelperActivity.this, "main=" + i, Toast.LENGTH_SHORT).show;
 //                            baseOrderSet();
 //                        }
 //                    });
@@ -247,7 +247,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 ScanDeviceBean scanDeviceBean = (ScanDeviceBean) parent.getItemAtPosition(position);
 
-                SPHelper.setParam(HomeActivity.this, "key", scanDeviceBean.getDeviceMac());
+                SPHelper.setParam(BleHelperActivity.this, "key", scanDeviceBean.getDeviceMac());
 
                 macVal = scanDeviceBean.getDeviceMac();
 
@@ -281,7 +281,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         end = Long.parseLong(start, 16) + i;
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
-                        Toast.makeText(HomeActivity.this, "输入有误，请重新输入", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BleHelperActivity.this, "输入有误，请重新输入", Toast.LENGTH_LONG).show();
                         dissmissDialog();
                         return;
                     }
@@ -311,7 +311,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     createMac(((TextView) findViewById(R.id.ed_mac_initial)).getText().toString().trim(), Integer.parseInt(((TextView) findViewById(R.id.ed_mac_number)).getText().toString().trim()));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
-                    Toast.makeText(HomeActivity.this, "输入有误，请重新输入", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "输入有误，请重新输入", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.get_real:
@@ -323,13 +323,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 YCBTClient.disconnectBle();
                 break;
             case R.id.auto_set_product_view:
-                startActivity(new Intent(HomeActivity.this, AutoFactoryActivity.class));
+                startActivity(new Intent(BleHelperActivity.this, AutoFactoryActivity.class));
                 break;
             case R.id.bt_start_scan: {
                 //YCBTClient.connectBle("DA:18:56:2C:3C:D0", null);
                 listVal.clear();
                 listModel.clear();
                 deviceAdapter.notifyDataSetChanged();
+                Log.e("BleHelperActivity", "BLE scan started from BleHelperActivity");
                 YCBTClient.startScanBle(new BleScanResponse() {
                     @Override
                     public void onScanResponse(int i, ScanDeviceBean scanDeviceBean) {
@@ -346,7 +347,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             Log.e("device", "mac=" + scanDeviceBean.getDeviceMac() + ";name=" + scanDeviceBean.getDeviceName() + "rssi=" + scanDeviceBean.getDeviceRssi());
                         }
                     }
-                }, 6);//0x7810
+                }, 10);//0x7810
                 break;
             }
             case R.id.bt_stop_scan: {
@@ -602,7 +603,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 //                });
 
 
-                Intent otherIntent = new Intent(HomeActivity.this, OtherActivity.class);
+                Intent otherIntent = new Intent(BleHelperActivity.this, OtherActivity.class);
                 startActivity(otherIntent);
                 break;
             case R.id.start_sport:
@@ -629,7 +630,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     syncHistoryThreeTime();
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.history_ecg_data_index:
@@ -640,7 +641,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     syncEcgHistoryTime(1);
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.history_ecg_data_timestamp:
@@ -651,7 +652,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     syncEcgHistoryTime(2);
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.history_blood_data_view:
@@ -662,7 +663,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     syncHistoryBloodTime();
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.history_ppg_data_view:
@@ -674,26 +675,26 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     syncHistoryPpgIndexs();
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.delete_history_data_view:
                 if (YCBTClient.connectState() == ReadWriteOK) {
                     deleteThreeHistory(0xffffffff);
                 } else {
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.delete_history_blood_data_view:
                 if (YCBTClient.connectState() == ReadWriteOK) {
                     deleteBloodHistory(0xffffffff);
                 } else {
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.start_test_blood_view:
                 if (YCBTClient.connectState() == ReadWriteOK) {
-                    startActivity(new Intent(HomeActivity.this, TestBoolActivity.class));
+                    startActivity(new Intent(BleHelperActivity.this, TestBoolActivity.class));
                 }
                 break;
             case R.id.history_data_light:
@@ -741,7 +742,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     setInvertTime();
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.get_ppi:
@@ -791,24 +792,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     syncHistoryPpiTime();
                 } else {
                     dissmissDialog();
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.delete_history_ppi_data_view:
                 if (YCBTClient.connectState() == ReadWriteOK) {
                     deletePpiHistory(0xffffffff);
                 } else {
-                    Toast.makeText(HomeActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "请先连接设备...", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.auto_ui_upgrade:
-                startActivity(new Intent(HomeActivity.this, AutoUiUpgradeActivity.class));
+                startActivity(new Intent(BleHelperActivity.this, AutoUiUpgradeActivity.class));
                 break;
             case R.id.auto_firmware_upgrade:
-                startActivity(new Intent(HomeActivity.this, AutoFirmwareUpgradeActivity.class));
+                startActivity(new Intent(BleHelperActivity.this, AutoFirmwareUpgradeActivity.class));
                 break;
             case R.id.firmware_recovery:
-                startActivity(new Intent(HomeActivity.this, FirmwareRecoveryActivity.class));
+                startActivity(new Intent(BleHelperActivity.this, FirmwareRecoveryActivity.class));
                 break;
         }
     }
@@ -873,9 +874,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 dissmissDialog();
                 if (isSuccess) {
-                    Toast.makeText(HomeActivity.this, "设置成功！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "设置成功！", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(HomeActivity.this, "设置失败！", Toast.LENGTH_LONG).show();
+                    Toast.makeText(BleHelperActivity.this, "设置失败！", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -1118,7 +1119,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(HomeActivity.this, "删除成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BleHelperActivity.this, "删除成功", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -1132,7 +1133,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(HomeActivity.this, "删除成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BleHelperActivity.this, "删除成功", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -1146,7 +1147,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(HomeActivity.this, "删除成功", Toast.LENGTH_LONG).show();
+                        Toast.makeText(BleHelperActivity.this, "删除成功", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -1254,10 +1255,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Log.e("mainorder", ".....connectent...........");
         if (connectEvent.state == 1 && isResume) {
             baseOrderSet();
-            Intent timeIntent = new Intent(HomeActivity.this, ChoseActivity.class);
+            Intent timeIntent = new Intent(BleHelperActivity.this, ChoseActivity.class);
             timeIntent.putExtra("mac", macVal);
             startActivity(timeIntent);
-            Toast.makeText(HomeActivity.this, getResources().getString(R.string.connect_success), Toast.LENGTH_SHORT).show();
+            Toast.makeText(BleHelperActivity.this, getResources().getString(R.string.connect_success), Toast.LENGTH_SHORT).show();
         }
     }
 

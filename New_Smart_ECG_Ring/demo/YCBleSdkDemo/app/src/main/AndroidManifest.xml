@@ -55,7 +55,7 @@
 
         <activity android:name=".ui.activities.LoginActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".HomeActivity"
+        <activity android:name=".BleHelperActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activities.OtpActivity"
             android:screenOrientation="portrait"/>
