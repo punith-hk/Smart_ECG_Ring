@@ -1,0 +1,14 @@
+<!-- res/drawable/battery_full.xml -->
+<vector
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="50dp"
+        android:height="50dp"
+        android:viewportWidth="50"
+        android:viewportHeight="50"
+        >
+    <group>
+        <path
+                android:fillColor="#00FF00"
+                android:pathData="M0,15h45v20H0V15zm5,5v10h35V20H5z"/>
+    </group>
+</vector>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Selected slot (Blue background, White text) -->
+    <item android:drawable="@color/blue" android:state_selected="true"/>
+
+    <!-- Booked slot (Red background, White text) -->
+    <item android:drawable="@color/red" android:state_enabled="false"/>
+
+    <!-- Default slot (White background, Black text) -->
+    <item android:drawable="@color/gray"/>
+
+</selector>

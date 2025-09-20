@@ -1,0 +1,8 @@
+<!-- res/drawable/gradient_color_bar.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+            android:angle="0"
+            android:endColor="#0000FF"
+            android:startColor="#FFA500" />
+    <corners android:radius="10dp" /> <!-- Optional: Rounded corners -->
+</shape>

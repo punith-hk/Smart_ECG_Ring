@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="60dp"
+        android:height="80dp"
+        android:viewportWidth="60"
+        android:viewportHeight="80">
+
+    <!-- Right Shape that aligns with the triangle -->
+    <path
+            android:fillColor="#FF9800"
+            android:pathData="M60,0 L0,80 L60,80 Z"/>
+</vector>

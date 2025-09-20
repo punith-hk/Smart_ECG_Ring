@@ -53,11 +53,15 @@
         <activity android:name=".upgrade.auto.AutoFirmwareUpgradeActivity" />
         <activity android:name=".upgrade.auto.AutoFactoryActivity" />
 
-        <activity android:name=".ui.activities.LoginActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".BleHelperActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activities.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activities.RegisterActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.activities.OtpActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.activities.HomeActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.activities.DeviceActivity"
             android:screenOrientation="portrait"/>

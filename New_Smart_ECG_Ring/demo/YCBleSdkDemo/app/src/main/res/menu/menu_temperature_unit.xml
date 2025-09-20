@@ -1,0 +1,9 @@
+<!-- res/menu/menu_temperature_unit.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/unit_celsius"
+            android:title="Celsius degrees (°C)" />
+    <item
+            android:id="@+id/unit_fahrenheit"
+            android:title="Fahrenheit (°F)" />
+</menu>
