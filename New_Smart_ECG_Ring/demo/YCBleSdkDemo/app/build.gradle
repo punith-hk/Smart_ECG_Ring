@@ -64,6 +64,8 @@ dependencies {
 
     implementation "com.google.android.material:material:1.4.0"
 
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.4.4'
+
     // circular progress bar
     implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
     // charts
@@ -106,6 +108,16 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.3.0"
 
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.8.1'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.1.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.1'
+    // Or a version compatible with Kotlin 1.7.1
+
+    // Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging:23.4.1'
+
+
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
     //implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     implementation 'com.alibaba:fastjson:1.2.83'

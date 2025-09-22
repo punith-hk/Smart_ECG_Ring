@@ -55,7 +55,6 @@ class OtpActivity : AppCompatActivity() {
         btnSubmit = findViewById<Button>(R.id.btnSubmit)
         tvOtpMessage = findViewById<TextView>(R.id.tvOtpMessage)
 
-
         isNewAccount = intent.getBooleanExtra("new_account", false)
 
         backIcon = findViewById<ImageButton>(R.id.backIcon)
@@ -87,6 +86,11 @@ class OtpActivity : AppCompatActivity() {
                 Toast.makeText(this, "OTP must be 6 digits", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+//            val intent = Intent(this@OtpActivity, HomeActivity::class.java)
+//            intent.flags =
+//                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+//            startActivity(intent)
 
             otpRepository.validateOtp(userId, otp).enqueue(object : Callback<OtpResponse> {
                 override fun onResponse(call: Call<OtpResponse>, response: Response<OtpResponse>) {

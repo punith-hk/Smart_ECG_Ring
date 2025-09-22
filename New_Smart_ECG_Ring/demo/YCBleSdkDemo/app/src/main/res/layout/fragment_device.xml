@@ -1,7 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <!-- Add fragment UI here later -->
-</FrameLayout>
+    android:layout_height="match_parent"
+    android:background="#0D99FF"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.HomeFragment">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/deviceConnectedView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="0dp"
+        android:backgroundTint="#FFFFFFFF"
+        android:elevation="20dp"
+        app:cardBackgroundColor="#FFFFFFFF"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="20dp"
+                android:contentDescription="@string/smart_ring"
+                android:src="@drawable/smart_ring" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ringName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/bind_the_de"
+                    android:textAppearance="@style/bind_the_de"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/connectionStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Connecting..."
+                    android:textAppearance="@style/bind_the_de"
+                    app:drawableStartCompat="@drawable/baseline_bluetooth_24" />
+
+                <TextView
+                    android:id="@+id/macId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="--"
+                    android:textAppearance="@style/bind_the_de" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Battery Icon -->
+                    <ImageView
+                        android:id="@+id/batteryIcon"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/baseline_battery_0_bar_24"
+                        android:contentDescription="battery_icon" />
+
+                    <!-- Percentage Text -->
+                    <TextView
+                        android:id="@+id/batteryPercentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/batteryIcon"
+                        android:text="--%"
+                        android:textColor="#000000"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/deviceSettingsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="#FFFFFFFF"
+        android:elevation="20dp"
+        app:cardBackgroundColor="#FFFFFFFF"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:id="@+id/tempUnitSetting"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:paddingStart="40dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/baseline_device_thermostat_24" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="36dp">
+
+                <!-- Temperature unit (e.g., °C or °F) -->
+                <TextView
+                    android:id="@+id/unitSetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Temperature unit"
+                    android:textSize="16sp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvTemperatureUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textSize="12sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bindDevice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/bind_device"
+        android:backgroundTint="#01AED6"
+        android:elevation="24dp"
+        android:minHeight="100dp"
+        app:cardCornerRadius="24dp">
+
+        <LinearLayout
+            android:id="@+id/bindDeviceLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cardText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bind_the_de"
+                android:textAppearance="@style/bind_the_de"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cardSubText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bind_the_device_sub"
+                android:textAppearance="@style/bind_the_de" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:id="@+id/firmWareDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center
+">
+        <ImageView
+            android:id="@+id/chipIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/baseline_memory_24"
+            android:contentDescription="battery_icon" />
+
+        <TextView
+            android:id="@+id/firmWareName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_toEndOf="@id/chipIcon"
+            android:text="FirmWareManagement"
+            android:textAppearance="@style/bind_the_de"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/firmWareVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/firmWareName"
+            android:text="0.0.0"
+            android:textAppearance="@style/bind_the_de"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/disConnectionBtn"
+        android:layout_width="170dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/round_button"
+        android:text="@string/str_unbind"
+        android:textAppearance="@style/bind_the_de"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+</LinearLayout>
