@@ -81,6 +81,11 @@
             android:enabled="true"
             android:exported="true" />
 
+        <service
+            android:name=".service.BackgroundService"
+            android:enabled="true"
+            android:exported="true" />
+
 
         <service android:name=".service.BackService" />
 

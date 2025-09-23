@@ -34,6 +34,7 @@ import com.smartringpro.mannaheal.ui.fragments.AppointmentsFragment
 import com.smartringpro.mannaheal.ui.fragments.CareFragment
 import com.smartringpro.mannaheal.ui.fragments.DeviceFragment
 import com.smartringpro.mannaheal.ui.fragments.DoctorsFragment
+import com.smartringpro.mannaheal.ui.fragments.Extra_name
 import com.smartringpro.mannaheal.ui.fragments.FamilyMembersFragment
 import com.smartringpro.mannaheal.ui.fragments.HealthDataFragment
 import com.smartringpro.mannaheal.ui.fragments.HomeFragment
@@ -42,6 +43,7 @@ import com.smartringpro.mannaheal.ui.fragments.ReferToFriendFragment
 import com.smartringpro.mannaheal.ui.fragments.SpecialistsFragment
 import com.smartringpro.mannaheal.ui.fragments.SymptomsFragment
 import com.smartringpro.mannaheal.ui.fragments.VitalsFragment
+import com.smartringpro.mannaheal.util.ConnectionPreferences
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -95,11 +97,11 @@ class HomeActivity : AppCompatActivity() {
 //        })
 
 //        Log.i("Home Activity", "onCreate Connection status: ${deviceViewModel.isDeviceConnected}")
-//        Log.i("Home Activity", "onCreate Connection check: $Extra_name")
+        Log.i("Home Activity", "onCreate Connection check: $Extra_name")
 
-//        val isConnected = ConnectionPreferences.getConnectionState(this)
+        val isConnected = ConnectionPreferences.getConnectionState(this)
 
-//        val name = ConnectionPreferences.getDeviceName(this)
+        val name = ConnectionPreferences.getDeviceName(this)
 
         setSupportActionBar(binding.toolbar)
 
@@ -142,15 +144,14 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-//        if (!name.isNullOrEmpty() && name != "Extra_Name" && !isConnected) {
-//            binding.bottomNavigationView.selectedItemId = R.id.device
-//            binding.sideNavigationView.setCheckedItem(R.id.nav_settings)
-//        } else if (savedInstanceState == null) {
-//            openFragment(HomeFragment(), "Health")
-//
-////            openFragment(SpecialistsFragment(),"Book")
-//        }
-        openFragment(HomeFragment(), "Health")
+        if (!name.isNullOrEmpty() && name != "Extra_Name" && !isConnected) {
+            binding.bottomNavigationView.selectedItemId = R.id.device
+            binding.sideNavigationView.setCheckedItem(R.id.nav_settings)
+        } else if (savedInstanceState == null) {
+            openFragment(HomeFragment(), "Health")
+
+//            openFragment(SpecialistsFragment(),"Book")
+        }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -164,13 +165,13 @@ class HomeActivity : AppCompatActivity() {
 
     private fun checkBluetoothReadyAndStartService() {
 
-//        val isConnected = ConnectionPreferences.getConnectionState(this)
-//
-//        val name = ConnectionPreferences.getDeviceName(this)
-//        val macAddress = ConnectionPreferences.getMacAddress(this)
-//        if (isConnected || macAddress == null || name == null) {
-//            return
-//        }
+        val isConnected = ConnectionPreferences.getConnectionState(this)
+
+        val name = ConnectionPreferences.getDeviceName(this)
+        val macAddress = ConnectionPreferences.getMacAddress(this)
+        if (isConnected || macAddress == null || name == null) {
+            return
+        }
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
 

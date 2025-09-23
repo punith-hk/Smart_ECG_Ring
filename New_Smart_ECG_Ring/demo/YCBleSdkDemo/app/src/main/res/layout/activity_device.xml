@@ -24,13 +24,18 @@
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="#01AED6"
                 android:layout_margin="30dp">
+<!--                <ListView-->
+<!--                    android:id="@+id/device_list_view"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:divider="@android:color/darker_gray"-->
+<!--                    android:dividerHeight="20dp" />-->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/mRecyclerView"
+                    android:id="@+id/device_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="20dp">
                 </androidx.recyclerview.widget.RecyclerView>
-
             </androidx.cardview.widget.CardView>
 
             <TextView
