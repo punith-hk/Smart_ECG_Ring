@@ -6,47 +6,45 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.util.Log
-import androidx.core.app.ActivityCompat
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import com.smartringpro.mannaheal.R
 import com.smartringpro.mannaheal.model.ConnectEvent
 import com.smartringpro.mannaheal.util.ConnectionPreferences
+import com.yucheng.ycbtsdk.Constants.BLEState
 import com.yucheng.ycbtsdk.YCBTClient
 import com.yucheng.ycbtsdk.response.BleConnectResponse
 import org.greenrobot.eventbus.EventBus
-import java.util.concurrent.TimeUnit
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class BackgroundService : Service() {
     private var macAddress: String? = null
-    private var name: String? = null
-    private var deviceFound = false
+    private var macName: String? = null
 
     private lateinit var mBluetoothAdapter: BluetoothAdapter
 
     private var pendingConnect: Boolean = false
-    private var pendingMacAddress: String? = null
-    private var pendingName: String? = null
     private var currentStatus: String = ""
 
     private var isManualDisconnect = false
-    private var isConnected: Boolean = false
+    private var isBleConnected: Boolean = false
 
     override fun onCreate() {
         super.onCreate()
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        YCBTClient.registerBleStateChange(bleConnectCallback)
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -55,17 +53,17 @@ class BackgroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.i(
-            "DeviceBackgroundService",
+            "Device Service",
             "onStartCommand called, about to start foreground notification"
         )
         try {
             startForegroundServiceNotification("Starting...", false)
             Log.i(
-                "DeviceBackgroundService",
+                "Device Service",
                 "startForegroundServiceNotification called successfully"
             )
         } catch (e: Exception) {
-            Log.e("DeviceBackgroundService", "Exception in startForegroundServiceNotification", e)
+            Log.e("Device Service", "Exception in startForegroundServiceNotification", e)
             stopSelf()
             return START_NOT_STICKY
         }
@@ -78,29 +76,35 @@ class BackgroundService : Service() {
         }
 
         macAddress =
-            intent?.getStringExtra("Extra_MacAddress") ?: ConnectionPreferences.getMacAddress(
+            intent?.getStringExtra("Device_MacAddress") ?: ConnectionPreferences.getMacAddress(
                 applicationContext
             )
-        name = intent?.getStringExtra("Extra_name") ?: ConnectionPreferences.getDeviceName(
+        macName = intent?.getStringExtra("Device_name") ?: ConnectionPreferences.getDeviceName(
             applicationContext
         )
 
-        Log.i("DeviceBackgroundService", "Service started $macAddress")
+        Log.i("Device Service", "Service started $macAddress")
 
-        // Always attempt to connect if mac/name are present; SDK will handle duplicate connections
-        if (macAddress != null && name != null && macAddress != "") {
-            Log.i("DeviceBackgroundService", "on start connection $macAddress")
-            connectToDevice(macAddress!!, name!!)
+        isBleConnected = YCBTClient.connectState() == BLEState.ReadWriteOK
+
+        if (!isBleConnected && macAddress != null && macName != null) {
+            Log.i("Device Service", "on start connection $macAddress")
+            connectToDevice(macAddress!!, macName!!)
         }
 
-        // UI/notification will be updated by the connection callback
+        if (isBleConnected) {
+            startForegroundServiceNotification("Connected to $macName", true)
+        } else {
+            startForegroundServiceNotification("Device not connected", false)
+        }
+
         return START_STICKY
     }
 
     private fun disconnectAndStop() {
-        Log.i("DeviceBackgroundService", "disconnectAndStop()")
+        Log.i("Device Service", "disconnectAndStop()")
         isManualDisconnect = true
-        isConnected = false
+        isBleConnected = false
         ConnectionPreferences.saveConnectionState(applicationContext, false, null, null)
         YCBTClient.disconnectBle()
         stopForeground(true)
@@ -112,8 +116,6 @@ class BackgroundService : Service() {
         if (bluetoothAdapter != null) {
             if (bluetoothAdapter.isEnabled) {
                 setAppPref("bluetooth", "1")
-                pendingMacAddress = macAddress
-                pendingName = name
                 pendingConnect = true
                 checkBluetoothPermissionAndProceed()
             } else {
@@ -135,33 +137,79 @@ class BackgroundService : Service() {
             ) {
                 setAppPref("bluetooth", "0", "No bluetooth Permission")
                 Log.w(
-                    "DeviceBackgroundService",
+                    "Device Service",
                     "BLUETOOTH_CONNECT permission not granted. Cannot connect."
                 )
                 startForegroundServiceNotification("Bluetooth permission not granted", true)
                 return
             }
         }
+
         setAppPref("bluetooth", "1")
-        pendingMacAddress?.let { mac ->
-            Log.i("DeviceBackgroundService", "MAC available: $mac — connecting directly")
-            YCBTClient.connectBle(mac, object : BleConnectResponse {
-                override fun onConnectResponse(code: Int) {
-                    Log.i("DeviceBackgroundService", "YCBTClient.connectBle callback: code=$code")
-                    if (code == 1) {
-                        isConnected = true
-                        startForegroundServiceNotification("Connected to $pendingName", true)
-                        ConnectionPreferences.saveConnectionState(applicationContext, true, mac, pendingName)
-                    } else {
-                        isConnected = false
-                        startForegroundServiceNotification("Device not connected", false)
-                        ConnectionPreferences.saveConnectionState(applicationContext, false, null, null)
-                    }
+
+        macAddress?.let { mac ->
+            Log.i("Device Service", "MAC available: $mac — connecting directly")
+            YCBTClient.connectBle(mac, bleConnectCallback)
+
+            macName?.let { name ->
+                if (!ConnectionPreferences.isDeviceSaved(applicationContext, mac)) {
+                    ConnectionPreferences.saveDevice(applicationContext, mac, name)
+                    Log.i("Device Service", "Device saved: $mac / $name")
                 }
-            })
+            }
+
+        }
+    }
+    private val bleConnectCallback = BleConnectResponse { code ->
+        Log.i("Device Service", "BLE state changed: $code")
+
+        when (code) {
+            10 -> {
+                Log.i("Device Service", "Device connected")
+
+            }
+
+            3 -> {
+                Log.i("Device Service", "Device disconnected")
+            }
+
+            5 -> {
+                Log.i("Device Service", "Connecting...")
+            }
+
+            else -> {
+                Log.i("Device Service", "Device not found / error")
+            }
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onBleConnectEvent(event: ConnectEvent) {
+        isBleConnected = event.state == 1
+
+        when (event.state) {
+            1 -> { // Connected
+                Log.i("Device Service callback", "Device connected")
+                ConnectionPreferences.saveConnectionState(
+                    applicationContext,
+                    true,
+                    macAddress,
+                    macName
+                )
+                startForegroundServiceNotification("Connected to $macName", true)
+                Toast.makeText(applicationContext, getString(R.string.connect_success), Toast.LENGTH_SHORT).show()
+            }
+            3 -> { // Disconnected
+                Log.i("Device Service callback", "Device disconnected")
+                startForegroundServiceNotification("Device not connected", false)
+                Toast.makeText(applicationContext, "Disconnected", Toast.LENGTH_SHORT).show()
+            }
+            5 -> {
+            }
+            else -> {
+            }
+        }
+    }
     private fun startForegroundServiceNotification(
         connectionStatus: String,
         playSound: Boolean = false
@@ -173,11 +221,8 @@ class BackgroundService : Service() {
             this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val priority = if (playSound) {
-            NotificationCompat.PRIORITY_MAX
-        } else {
-            NotificationCompat.PRIORITY_LOW
-        }
+        // Always use high priority for visibility
+        val priority = NotificationCompat.PRIORITY_MAX
 
         val builder = NotificationCompat.Builder(this, "RING_CHANNEL")
             .setContentTitle("Ring Connection Service")
@@ -191,7 +236,6 @@ class BackgroundService : Service() {
             builder.setSound(null)
         }
         // No .setDefaults(NotificationCompat.DEFAULT_ALL) to avoid forcing sound/vibration
-
         val notification = builder.build()
         val notificationId = 1 // Use a constant ID here
         startForeground(notificationId, notification)
@@ -241,7 +285,11 @@ class BackgroundService : Service() {
 
 
     override fun onDestroy() {
-        Log.i("DeviceBackgroundService", "Service stopped")
+        Log.i("Device Service", "Service stopped")
+        YCBTClient.unRegisterBleStateChange(bleConnectCallback)
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
+        }
         super.onDestroy()
     }
 }

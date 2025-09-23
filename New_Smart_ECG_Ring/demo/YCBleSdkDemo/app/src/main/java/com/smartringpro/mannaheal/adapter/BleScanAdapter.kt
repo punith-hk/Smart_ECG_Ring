@@ -37,10 +37,19 @@ class BleScanAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val device = devices[position]
-        holder.nameText.text = device.deviceName ?: "N/A"
-        holder.macAddressText.text = device.deviceMac ?: ""
+        val mac = device.deviceMac ?: ""
+        val name = device.deviceName ?: "N/A"
+
+        holder.nameText.text = name
+        holder.macAddressText.text = mac
         holder.rssiText.text = device.deviceRssi?.toString() ?: ""
-        holder.bondStateText.text = "NOT BONDED"
+
+        // Show bond state based on saved devices
+        holder.bondStateText.text = if (ConnectionPreferences.isDeviceSaved(context, mac)) {
+            "BONDED"
+        } else {
+            "NOT BONDED"
+        }
         // Optionally set icons/images if needed
         holder.rawDataBtn.setOnClickListener {
             val intent = Intent(context, com.smartringpro.mannaheal.BleHelperActivity::class.java)

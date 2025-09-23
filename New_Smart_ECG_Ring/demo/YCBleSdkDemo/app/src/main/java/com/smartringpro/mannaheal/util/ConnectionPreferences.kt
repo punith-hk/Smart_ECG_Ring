@@ -6,12 +6,16 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.smartringpro.mannaheal.api.ringApi.RingConfig
 
+data class DeviceInfo(val mac: String, val name: String)
+
 object ConnectionPreferences {
 
     private const val PREF_NAME = "connection_preferences"
     private const val KEY_IS_CONNECTED = "is_connected"
     private const val KEY_MAC_ADDRESS = "mac_address"
     private const val KEY_NAME = "name"
+
+    private const val KEY_SAVED_DEVICES = "saved_devices"
 
     fun saveConnectionState(context: Context, isConnected: Boolean, macAddress: String?, name: String?,) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -35,6 +39,30 @@ object ConnectionPreferences {
     fun getDeviceName(context: Context): String? {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         return  sharedPreferences.getString(KEY_NAME, null)
+    }
+
+    fun getSavedDevices(context: Context): MutableList<DeviceInfo> {
+        val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val json = sharedPreferences.getString(KEY_SAVED_DEVICES, null) ?: return mutableListOf()
+        val type = object : TypeToken<MutableList<DeviceInfo>>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    fun saveDevice(context: Context, mac: String, name: String) {
+        val devices = getSavedDevices(context)
+
+        // check if already saved
+        if (devices.any { it.mac == mac }) return
+
+        devices.add(DeviceInfo(mac, name))
+
+        val json = Gson().toJson(devices)
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .edit().putString(KEY_SAVED_DEVICES, json).apply()
+    }
+
+    fun isDeviceSaved(context: Context, mac: String): Boolean {
+        return getSavedDevices(context).any { it.mac == mac }
     }
 
     fun setLastRingConfig(context: Context, configs: List<RingConfig>) {

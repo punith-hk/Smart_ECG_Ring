@@ -2,7 +2,6 @@ package com.smartringpro.mannaheal.ui.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.app.ActivityManager
 import android.app.AlertDialog
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
@@ -34,22 +33,16 @@ import com.smartringpro.mannaheal.service.BackgroundService
 import com.smartringpro.mannaheal.ui.activities.DeviceActivity
 import com.smartringpro.mannaheal.util.ApplicationPreferences
 import com.smartringpro.mannaheal.util.ConnectionPreferences
-import com.yucheng.ycbtsdk.Constants
+import com.yucheng.ycbtsdk.Constants.BLEState
 import com.yucheng.ycbtsdk.YCBTClient
-import com.yucheng.ycbtsdk.response.BleConnectResponse
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-var Extra_macAddress: String? = null
-var Extra_name: String? = null
-
 class DeviceFragment : Fragment() {
     private var _binding: FragmentDeviceBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var bluetoothResultLauncher: ActivityResultLauncher<Intent>
-
     private lateinit var mBluetoothAdapter: BluetoothAdapter
     private val bluetoothPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -61,14 +54,13 @@ class DeviceFragment : Fragment() {
                 .show()
         }
     }
+    private var deviceMacAddress: String? = null
+    private var deviceName: String? = null
 
-    private var hasRetriedConnection = false
-    private var currentStatus: String = ""
+    private var isBleConnected = false
     private var retryCount = 0
     private val maxRetries = 2
-
     private var isManualDisconnectUI = false
-    private var isBleConnected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,8 +91,20 @@ class DeviceFragment : Fragment() {
 
         checkBluetoothPermissionAndProceed()
 
-        Extra_macAddress = ConnectionPreferences.getMacAddress(requireContext())
-        Extra_name = ConnectionPreferences.getDeviceName(requireContext())
+        deviceMacAddress = ConnectionPreferences.getMacAddress(requireContext())
+        deviceName = ConnectionPreferences.getDeviceName(requireContext())
+
+        if (deviceMacAddress.isNullOrEmpty() || deviceName.isNullOrEmpty()) {
+            deviceMacAddress = null
+            deviceName = null
+        }
+
+        Log.i("Device Fragment", "Connected device: $deviceName $deviceMacAddress")
+
+        Log.i("Device Fragment", "Connection state: ${YCBTClient.connectState()} ")
+
+        isBleConnected = YCBTClient.connectState() == BLEState.ReadWriteOK
+
         _binding = FragmentDeviceBinding.inflate(inflater, container, false)
         val view = binding.root
 
@@ -126,15 +130,15 @@ class DeviceFragment : Fragment() {
                 .setPositiveButton("Sure") { dialog, _ ->
                     showLoadingDialog("Disconnecting, please wait...", 4000)
                     isManualDisconnectUI = true
-                    Extra_macAddress = null
-                    Extra_name = null
+                    deviceMacAddress = null
+                    deviceName = null
+
+                    val intent = Intent(requireContext(), BackgroundService::class.java)
+                    intent.action = "ACTION_DISCONNECT"
+                    requireContext().startService(intent)
 
                     binding.connectionStatus.text = "Disconnecting..."
                     binding.disConnectionBtn.isEnabled = false
-
-                    YCBTClient.disconnectBle()
-
-                    ConnectionPreferences.saveConnectionState(requireContext(), false, null, null)
 
                     dialog.dismiss()
 
@@ -151,8 +155,21 @@ class DeviceFragment : Fragment() {
 
         getTemperatureUnit()
         connectionCheck()
-//        initObservers()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
+    }
+
+    override fun onStop() {
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
+        }
+        super.onStop()
     }
 
     private fun showTemperatureUnitPopup(view: View) {
@@ -183,6 +200,12 @@ class DeviceFragment : Fragment() {
     }
 
     private fun saveTemperatureUnit(unit: String) {
+        ApplicationPreferences.putString(
+            requireContext(),
+            "temperature_unit",
+            unit,
+            "UserPreferences"
+        )
 
     }
 
@@ -204,37 +227,28 @@ class DeviceFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-    }
-
-    override fun onStop() {
-        if (EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().unregister(this)
-        }
-        super.onStop()
-    }
-
     private fun connectionCheck() {
+
         if (_binding == null || !isAdded) return
-        Log.i("Device Fragment", "Connected device: $Extra_name $Extra_macAddress")
-        if (Extra_macAddress != null && Extra_name != null && Extra_macAddress!!.isNotEmpty() && Extra_name!!.isNotEmpty()) {
+
+        if (deviceMacAddress != null && deviceName != null && deviceMacAddress!!.isNotEmpty() && deviceName!!.isNotEmpty()) {
             binding.bindDevice.visibility = View.GONE
-            binding.ringName.text = Extra_name
-            binding.macId.text = Extra_macAddress
+            binding.ringName.text = deviceName
+            binding.macId.text = deviceMacAddress
             binding.deviceConnectedView.visibility = View.VISIBLE
             binding.deviceSettingsView.visibility = View.VISIBLE
             binding.firmWareDetails.visibility = View.VISIBLE
             binding.disConnectionBtn.visibility = View.VISIBLE
 
+            Log.i("Device Fragment", "Connected device: $isBleConnected")
+
             if (!isBleConnected) {
                 binding.connectionStatus.text = "Connecting..."
-                startBackgroundServiceForConnection(Extra_macAddress!!, Extra_name!!)
+                startBackgroundServiceForConnection(deviceMacAddress!!, deviceName!!)
             } else {
                 binding.connectionStatus.text = "Connected"
+                setupBatteryInfo()
+                setUpFirmWare()
             }
         } else {
             binding.bindDevice.visibility = View.VISIBLE
@@ -246,9 +260,9 @@ class DeviceFragment : Fragment() {
     }
 
     private fun startBackgroundServiceForConnection(mac: String, name: String) {
-        val intent = Intent(requireContext(), com.smartringpro.mannaheal.service.BackgroundService::class.java).apply {
-            putExtra("Extra_MacAddress", mac)
-            putExtra("Extra_name", name)
+        val intent = Intent(requireContext(), BackgroundService::class.java).apply {
+            putExtra("Device_MacAddress", mac)
+            putExtra("Device_name", name)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireContext().startForegroundService(intent)
@@ -259,84 +273,79 @@ class DeviceFragment : Fragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onBleConnectEvent(event: com.smartringpro.mannaheal.model.ConnectEvent) {
-        isBleConnected = event.state == com.yucheng.ycbtsdk.Constants.BLEState.Connected || event.state == 1
+    fun onBleConnectEvent(event: ConnectEvent) {
+        isBleConnected = event.state == 1
+
+        Log.i("Device fragment callback", "${event.state}")
+
         when (event.state) {
-            com.yucheng.ycbtsdk.Constants.BLEState.Connected, 1 -> {
+            0 -> { // Disconnecting
+                binding.connectionStatus.text = "Disconnecting..."
+            }
+            1 -> { // Connected
+                Log.i("Device fragment callback", "Device connected")
                 binding.connectionStatus.text = "Connected"
-                Toast.makeText(
+                setupBatteryInfo()
+                setUpFirmWare()
+                ConnectionPreferences.saveConnectionState(
                     requireContext(),
-                    getString(com.smartringpro.mannaheal.R.string.connect_success),
-                    Toast.LENGTH_SHORT
-                ).show()
+                    true,
+                    deviceMacAddress,
+                    deviceName
+                )
+                Toast.makeText(requireContext(), getString(R.string.connect_success), Toast.LENGTH_SHORT).show()
             }
-            com.yucheng.ycbtsdk.Constants.BLEState.Disconnect, 3 -> {
+            3 -> { // Disconnected
                 binding.connectionStatus.text = "Disconnected"
-                Toast.makeText(
-                    requireContext(),
-                    "Disconnected",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(requireContext(), "Disconnected", Toast.LENGTH_SHORT).show()
             }
-            com.yucheng.ycbtsdk.Constants.BLEState.Connecting, 5 -> {
+            5 -> { // Connecting
                 binding.connectionStatus.text = "Connecting..."
             }
             else -> {
-                binding.connectionStatus.text = "Other"
+                binding.connectionStatus.text = "Device not found"
             }
         }
     }
 
+    private fun setUpFirmWare() {
+        val firmWareVersion = YCBTClient.getBindDeviceVersion()
+        binding.firmWareVersion.text = firmWareVersion
+        ApplicationPreferences.putString(requireContext(), "firmwareVersion", firmWareVersion)
+        Log.i("Device Fragment", "Result: firmware hardware version: $firmWareVersion")
+    }
 
-//    private fun connectionBle() {
-//        Log.i("Device Fragment", "connectionBle check: ${com.smartringpro.mannaheal.ui.fragments.Extra_name}")
-//        if (com.smartringpro.mannaheal.ui.fragments.Extra_name?.isEmpty() == true) return
+    private fun setupBatteryInfo() {
+
+        val batteryValue = YCBTClient.getDeviceBatteryValue() // 0 - 100
+        val batteryState = YCBTClient.getDeviceBatteryState() // 0 = normal, 1 = charging?
+
+        Log.i("Device fragment", "Battery $batteryValue, $batteryState")
+
+        updateBatteryIcon(batteryValue)
+
+//        if (batteryValue >= 0) { // valid value
 //
-//        Log.i("Device Fragment", "bleConnectHelper connected check: ${com.smartringpro.mannaheal.ui.fragments.Extra_name}")
-//        val intent = Intent(requireContext(), BackgroundService::class.java).apply {
-//            putExtra("Extra_MacAddress", com.smartringpro.mannaheal.ui.fragments.Extra_macAddress)
-//            putExtra("Extra_name", com.smartringpro.mannaheal.ui.fragments.Extra_name)
-//        }
-//
-//        if (isServiceRunning(BackgroundService::class.java)) {
-//            if (!bleConnectHelper.isConnected) {
-//                // Removed stopService(intent) to avoid race condition
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    requireContext().startForegroundService(intent)
-//                } else {
-//                    requireContext().startService(intent)
-//                }
-//                Log.i("Device Fragment", "Service restarted as it was running but not connected")
+//            if (batteryState == 1) {
+//                binding.batteryChargingIcon.visibility = View.VISIBLE
 //            } else {
-//                Log.i("Device Fragment", "Service already running and connected")
+//                binding.batteryChargingIcon.visibility = View.GONE
 //            }
-//        } else {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                requireContext().startForegroundService(intent)
-//            } else {
-//                requireContext().startService(intent)
-//            }
-//            Log.i("Device Fragment", "Service not running, starting new service")
 //        }
-//
-//        ConnectionPreferences.saveConnectionState(
-//            requireContext(),
-//            true,
-//            com.smartringpro.mannaheal.ui.Extra_macAddress,
-//            com.smartringpro.mannaheal.ui.Extra_name
-//        )
-//    }
+    }
 
+    private fun updateBatteryIcon(batteryPercentage: Int) {
+        binding.batteryPercentage.text = "$batteryPercentage%"
+        val drawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.baseline_battery_0_bar_24)
 
-
-    private fun isServiceRunning(serviceClass: Class<*>): Boolean {
-        val manager = requireContext().getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
-            if (serviceClass.name == service.service.className) {
-                return true
-            }
+        val color = when {
+            batteryPercentage > 30 -> Color.parseColor("#75F94C")
+            batteryPercentage > 10 -> Color.parseColor("#FFA500")
+            else -> Color.RED
         }
-        return false
+        DrawableCompat.setTint(drawable!!, color)
+        binding.batteryIcon.setImageDrawable(drawable)
     }
 
     private fun checkBluetoothPermissionAndProceed() {

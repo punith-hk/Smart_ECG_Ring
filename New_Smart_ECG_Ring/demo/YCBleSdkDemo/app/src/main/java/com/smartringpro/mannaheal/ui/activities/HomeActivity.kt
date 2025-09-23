@@ -34,7 +34,6 @@ import com.smartringpro.mannaheal.ui.fragments.AppointmentsFragment
 import com.smartringpro.mannaheal.ui.fragments.CareFragment
 import com.smartringpro.mannaheal.ui.fragments.DeviceFragment
 import com.smartringpro.mannaheal.ui.fragments.DoctorsFragment
-import com.smartringpro.mannaheal.ui.fragments.Extra_name
 import com.smartringpro.mannaheal.ui.fragments.FamilyMembersFragment
 import com.smartringpro.mannaheal.ui.fragments.HealthDataFragment
 import com.smartringpro.mannaheal.ui.fragments.HomeFragment
@@ -97,7 +96,6 @@ class HomeActivity : AppCompatActivity() {
 //        })
 
 //        Log.i("Home Activity", "onCreate Connection status: ${deviceViewModel.isDeviceConnected}")
-        Log.i("Home Activity", "onCreate Connection check: $Extra_name")
 
         val isConnected = ConnectionPreferences.getConnectionState(this)
 
