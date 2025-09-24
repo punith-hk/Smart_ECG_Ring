@@ -293,7 +293,7 @@ class DeviceFragment : Fragment() {
                     deviceMacAddress,
                     deviceName
                 )
-                Toast.makeText(requireContext(), getString(R.string.connect_success), Toast.LENGTH_SHORT).show()
+//                Toast.makeText(requireContext(), "Connected to $deviceName", Toast.LENGTH_SHORT).show()
             }
             3 -> { // Disconnected
                 binding.connectionStatus.text = "Disconnected"

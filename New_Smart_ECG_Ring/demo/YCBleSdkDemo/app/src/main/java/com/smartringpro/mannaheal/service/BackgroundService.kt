@@ -197,7 +197,7 @@ class BackgroundService : Service() {
                     macName
                 )
                 startForegroundServiceNotification("Connected to $macName", true)
-                Toast.makeText(applicationContext, getString(R.string.connect_success), Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Connected to $macName", Toast.LENGTH_SHORT).show()
             }
             3 -> { // Disconnected
                 Log.i("Device Service callback", "Device disconnected")
