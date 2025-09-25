@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 import com.smartringpro.mannaheal.api.profile.ProfileDataRepository;
 import com.smartringpro.mannaheal.api.profile.ProfileDataResponse;
 import com.smartringpro.mannaheal.api.register.FcmTokenResponse;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AndroidThreeTen.init(this);
 
         FirebaseApp.initializeApp(this);
 
