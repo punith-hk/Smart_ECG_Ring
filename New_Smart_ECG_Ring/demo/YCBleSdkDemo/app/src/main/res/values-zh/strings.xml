@@ -17,6 +17,33 @@
     <string name="low">Low</string>
     <string name="firmware_version">firmware hardware version : ..</string>
 
+    <string name="str_hrv">heart rate variability</string>
+    <string name="str_pressure">pressure</string>
+    <string name="str_auto_test_config_setting">auto test config set:</string>
+    <string name="str_set">set</string>
+    <string name="str_get">get</string>
+    <string name="str_get_all">read all configs</string>
+    <string name="str_enable_status">Switch status:</string>
+    <string name="str_interval_time">Interval time(min):</string>
+    <string name="str_sync_auto_hrv_data">Synchronize auto hrv data</string>
+    <string name="str_sync_auto_pressure_data">Synchronize auto pressure data</string>
+    <string name="str_notify_firmware_uplaod_data">Send instructions to notify firmware to report data</string>
+    <string name="heart_rate_variability">Heart rate variability</string>
+    <string name="_0_times_min">0 times/min</string>
+    <string name="stress">Stress</string>
+    <string name="zero">0</string>
+    <string name="temperature">Body temperature</string>
+    <string name="available_doctors">Available Doctors</string>
+    <string name="online">Online</string>
+    <string name="book_now">Book Now</string>
+    <string name="choose_your_preferred_date_time"><![CDATA[Choose your preferred Date & Time]]></string>
+    <string name="next_week">Next week</string>
+    <string name="prev_week">Prev Week</string>
+    <string name="appointment_for">Appointment for</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="make_an_appointment">Make an Appointment</string>
+    <string name="card_title">Card Title</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>

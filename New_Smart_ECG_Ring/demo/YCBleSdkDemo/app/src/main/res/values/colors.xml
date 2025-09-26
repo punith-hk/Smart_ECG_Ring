@@ -35,6 +35,19 @@
     <color name="include_bottom_tv_start_button_color">#FFFFFF</color>
     <color name="include_bottom_tv_title_color">#000F0C</color>
 
+    <color name="color_btn1">#ff000000</color>
+    <color name="color_btn2">#ff1d2088</color>
+    <color name="color_btn3">#ffe60012</color>
+    <color name="color_btn4">#ffe4007f</color>
+    <color name="color_btn5">#ffff00ff</color>
+    <color name="color_btn6">#ffa40000</color>
+    <color name="color_btn7">#ff556fb5</color>
+    <color name="color_btn8">#fffff100</color>
+    <color name="color_btn9">#fff29b76</color>
+    <color name="color_btn10">#ffeb6100</color>
+    <color name="color_btn11">#ff32b16c</color>
+    <color name="color_btn12">#ff00a0e9</color>
+
     <!--心电测量页-->
     <color name="ecg_measure_solid_text_color">#15666666</color>
     <!--心电测量页 数据 Text颜色-->

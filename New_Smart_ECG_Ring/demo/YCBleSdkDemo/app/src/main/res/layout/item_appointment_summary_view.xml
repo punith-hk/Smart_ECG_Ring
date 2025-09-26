@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/appointmentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            android:backgroundTint="#FFFFFFFF"
+            tools:ignore="HardcodedText"
+            android:elevation="0dp"
+            android:minHeight="100dp"
+            app:cardBackgroundColor="#FFFFFFFF"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="10dp">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:paddingVertical="15dp"
+                android:orientation="vertical">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:text="Patient name"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=":"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+                <TextView
+                        android:id="@+id/patientName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Patient name"
+                        android:textSize="16sp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:text="Doctor name"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=":"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                <TextView
+                        android:id="@+id/doctorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:text="Doc name"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/appointmentLayout"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:text="Appointment Date"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text=":"
+                        android:textSize="16sp"
+                        android:textColor="@color/black" />
+                <TextView
+                        android:id="@+id/aTimeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="2024-09-12 , 11:40 am"
+                        android:textSize="16sp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/black" />
+
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+                android:id="@+id/SummaryfwdArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="end|center_vertical"
+                android:contentDescription="View"
+                android:src="@drawable/baseline_arrow_forward_ios_24"/>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

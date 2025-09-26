@@ -1,8 +1,391 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainScroll"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <!-- Add fragment UI here later -->
-</FrameLayout>
+    android:layout_height="match_parent"
+    android:background="#0D99FF"
+    android:fillViewport="true"
+    tools:context=".ui.fragments.SymptomsFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="top">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/doctor_detail_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="12dp"
+            android:elevation="12dp"
+            app:cardCornerRadius="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/doctor_image_icon_container"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_margin="10dp"
+                    android:elevation="2dp"
+                    app:cardCornerRadius="12dp">
+
+                    <ImageView
+                        android:id="@+id/doctor_image_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="doctors_photo"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baseline_account_circle_24" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/doctorDetailsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toEndOf="@id/doctor_image_icon_container"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/doctor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Name"
+                        android:textAppearance="@style/bind_the_de"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/doctors_degree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="degree"
+                        android:textAppearance="@style/bind_the_de" />
+
+                    <TextView
+                        android:id="@+id/doctors_specialization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="doctors specialization"
+                        android:textAppearance="@style/bind_the_de" />
+                </LinearLayout>
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/symptoms_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:elevation="12dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/textViewSymptomsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Symptoms"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Symptoms List Container -->
+                <LinearLayout
+                    android:id="@+id/symptomsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:orientation="vertical">
+
+                    <!-- Selected symptoms will be dynamically added here -->
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSaveSymptomsData"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_button"
+                    android:padding="5dp"
+                    android:text="Proceed"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Text: What problems are you currently facing? -->
+        <TextView
+            android:id="@+id/text_problems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="What problems are you currently facing?"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/tabContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <TextView
+                android:id="@+id/tabMale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tab_background_selector"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Male"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tabFemale"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tab_background_selector"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Female"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Head and Throat (Stacked in a Vertical Layout) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/fShape_hair"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="-90dp"
+                android:background="@drawable/hair_shape" />
+
+            <!-- Circular Head -->
+            <View
+                android:id="@+id/shape_head"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@drawable/head_shape" />
+
+            <!-- Neck (Properly Positioned Below the Head) -->
+            <View
+                android:id="@+id/shape_neck"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/neck_shape" />
+        </LinearLayout>
+
+        <!-- Body Section with Left Hand, Body, and Right Hand -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Left Hand -->
+            <View
+                android:id="@+id/shape_left_hand"
+                android:layout_width="30dp"
+                android:layout_height="160dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/body_shape" />
+
+            <!-- Upper and Lower Body (Stacked in Vertical Layout) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <!-- Male Upper Body -->
+                <View
+                    android:id="@+id/mShape_upper_body"
+                    android:layout_width="100dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="@drawable/body_shape" />
+                <!-- Female Upper Body -->
+                <View
+                    android:id="@+id/fShape_upper_body"
+                    android:layout_width="100dp"
+                    android:layout_height="90dp"
+                    android:layout_marginBottom="3dp"
+                    android:background="@drawable/f_upper_body_shape" />
+
+                <!-- Male Middle Body -->
+                <View
+                    android:id="@+id/mShape_middle_body"
+                    android:layout_width="100dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/body_shape" />
+                <!-- Female Middle Body -->
+                <View
+                    android:id="@+id/fShape_middle_body"
+                    android:layout_width="100dp"
+                    android:layout_height="65dp"
+                    android:background="@drawable/f_middle_body_shape" />
+            </LinearLayout>
+
+            <!-- Right Hand -->
+            <View
+                android:id="@+id/shape_right_hand"
+                android:layout_width="30dp"
+                android:layout_height="160dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/body_shape" />
+        </LinearLayout>
+
+        <!-- Bottom Section -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="-2dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Left Bottom Shape (Pulled Closer) -->
+            <View
+                android:id="@+id/shape_left_bottom"
+                android:layout_width="48dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="-53dp"
+                android:background="@drawable/left_bottom" />
+
+            <!-- Center Reverse Triangle -->
+            <View
+                android:id="@+id/shape_center_body"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="-56dp"
+                android:background="@drawable/reverse_triangle" />
+
+            <!-- Right Bottom Shape (Pulled Closer) -->
+            <View
+                android:id="@+id/shape_right_bottom"
+                android:layout_width="49dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="9dp"
+                android:background="@drawable/right_bottom" />
+        </LinearLayout>
+
+        <!-- Bottom Section -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Left Leg -->
+            <View
+                android:id="@+id/shape_left_leg"
+                android:layout_width="46dp"
+                android:layout_height="160dp"
+                android:layout_marginRight="7dp"
+                android:background="@drawable/body_shape" />
+
+            <!-- Right Leg -->
+            <View
+                android:id="@+id/shape_right_leg"
+                android:layout_width="45dp"
+                android:layout_height="160dp"
+                android:layout_marginLeft="0dp"
+                android:background="@drawable/body_shape" />
+        </LinearLayout>
+
+        <!-- Other symptoms -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-100dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp">
+
+                <View
+                    android:id="@+id/other_symptoms"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/body_shape" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Other Symptoms"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

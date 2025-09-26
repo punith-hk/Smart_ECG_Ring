@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/specilistDoctorsView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginVertical="10dp"
+            android:backgroundTint="#FFFFFFFF"
+            android:elevation="0dp"
+            app:cardBackgroundColor="#FFFFFFFF"
+            app:cardCornerRadius="16dp">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/doctor_image_icon_container"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_margin="10dp"
+                    android:elevation="2dp"
+                    app:cardCornerRadius="12dp">
+
+                <ImageView
+                        android:id="@+id/doctor_image_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="doctors_photo"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/baseline_account_circle_24" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                    android:id="@+id/doctorDetailsView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toEndOf="@id/doctor_image_icon_container"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/doctor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Name"
+                        android:textAppearance="@style/bind_the_de"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <TextView
+                        android:id="@+id/doctors_degree"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="degree"
+                        android:textAppearance="@style/bind_the_de" />
+
+                <TextView
+                        android:id="@+id/doctors_specialization"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="doctors specialization"
+                        android:textAppearance="@style/bind_the_de" />
+            </LinearLayout>
+
+            <Button
+                    android:id="@+id/bookNow"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/round_button"
+                    android:padding="5dp"
+                    android:text="@string/book_now"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

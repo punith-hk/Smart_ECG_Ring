@@ -1,0 +1,185 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+        <!-- Name and Icons Row -->
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:id="@+id/profileImageView"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle_shape"
+                    android:scaleType="fitCenter" />
+
+            <!-- Name -->
+            <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/profileImageView"
+                    android:layout_marginTop="14dp"
+                    android:text="Test User"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            <!-- Edit Icon -->
+            <ImageView
+                    android:id="@+id/editIcon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="80dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/baseline_edit_note_24" />
+
+            <!-- Delete Icon -->
+            <ImageView
+                    android:id="@+id/deleteIcon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/baseline_delete_forever_24" />
+        </RelativeLayout>
+
+        <!-- TableLayout for Relationship, Blood Group, Gender, DOB -->
+        <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:stretchColumns="*">
+
+            <!-- Relationship -->
+            <TableRow>
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="Relationship"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=":"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+
+                <TextView
+                        android:id="@+id/relationshipTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Father"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+            </TableRow>
+
+            <!-- Blood Group -->
+            <TableRow android:layout_marginTop="2dp">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="Blood Group"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=":"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+
+                <TextView
+                        android:id="@+id/bloodGroupTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="AB+"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+            </TableRow>
+
+            <!-- Gender -->
+            <TableRow android:layout_marginTop="2dp">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="Gender"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=":"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+
+                <TextView
+                        android:id="@+id/genderTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="Male"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+            </TableRow>
+
+            <!-- DOB -->
+            <TableRow android:layout_marginTop="2dp">
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="DOB"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+
+                <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=":"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center" />
+
+                <TextView
+                        android:id="@+id/dobTextView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:text="01/01/1990"
+                        android:textSize="14sp"
+                        android:textColor="@color/black" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
