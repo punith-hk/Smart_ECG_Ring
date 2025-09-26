@@ -170,7 +170,7 @@
     <string name="rtk_dfu_toast_bt_not_enabled">Bluetooth not turned on</string>
     <string name="rtk_dfu_toast_connect_device">Connecting to device: %1$s, please wait...</string>
     <string name="rtk_dfu_toast_operation_failed">Operation failed</string>
-    <string name="rtk_dfu_toast_no_device">Device not connected</string>
+    <string name="str_toast_no_device">Device not connected</string>
 
     <string name="rtk_dfu_fc_undefined">undefined</string>
     <string name="rtk_dfu_fc_pack_loss">No upgradeable files found</string>

@@ -184,6 +184,8 @@ class HealthDataFragment : Fragment() {
         "ecg" to drawable.baseline_favorite_24
     )
 
+    private var isBleConnected: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -191,11 +193,22 @@ class HealthDataFragment : Fragment() {
         }
         testCode = testTypeToHistoryMap[testType]
 
+
         val sharedPreferences =
             requireContext().getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
         tempUnit =
             sharedPreferences.getString("temperature_unit", "Celsius degrees") ?: "Celsius degrees"
         Log.i("Health Fragment", "$testType, $testCode, $testUnit")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        isBleConnected = YCBTClient.connectState() == Constants.BLEState.ReadWriteOK
+        if (!isBleConnected) {
+            Toast.makeText(requireContext(), "Please connect to the device", Toast.LENGTH_LONG).show()
+            return
+        }
     }
 
     override fun onCreateView(
@@ -1704,6 +1717,11 @@ class HealthDataFragment : Fragment() {
     }
 
     private fun fetchRingData() {
+
+        if (!isBleConnected) {
+            Log.w("Health Fragment", "Device not connected, aborting fetch")
+            return
+        }
         // Sync ring config with server before fetching data
 //        AutoTestConfigSyncHelper(requireContext()).syncFromApiAndUpdateRing()
 
@@ -1768,21 +1786,27 @@ class HealthDataFragment : Fragment() {
                 }
             }
 
-//            "blood_pressure" -> {
-//                dataList.forEach { item ->
-//                    val sbp = item["bloodSBP"] as? Int // systolic
-//                    val dbp = item["bloodDBP"] as? Int // diastolic
-//                    val timestamp = item["bloodStartTime"] as? Long
-//                    if (sbp != null && dbp != null && timestamp != null) {
-//                        // you can either send both values separately, or combine into one string
-//                        ringEntries.add(RingValueEntry("$sbp/$dbp", timestamp))
-//
-//                        val formattedTime = java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-//                            .format(java.util.Date(timestamp))
-//                        Log.i("HealthDataFragment", "BP=$sbp/$dbp mmHg at $formattedTime")
-//                    }
-//                }
-//            }
+            "blood_pressure" -> {
+                dataList.forEach { item ->
+                    val sbp = item["bloodSBP"] as? Int // systolic
+                    val dbp = item["bloodDBP"] as? Int // diastolic
+                    val timestamp = item["bloodStartTime"] as? Long
+                    if (sbp != null && dbp != null && timestamp != null) {
+                        // Combine systolic and diastolic into one value string
+                        val bpValue = "$sbp/$dbp"
+                        ringEntries.add(RingValueEntry(bpValue, timestamp / 1000))
+
+                        Log.i(
+                            "HealthDataFragment",
+                            "BP=$bpValue mmHg at ${
+                                java.text.SimpleDateFormat(
+                                    "yyyy-MM-dd HH:mm:ss"
+                                ).format(java.util.Date(timestamp))
+                            }"
+                        )
+                    }
+                }
+            }
 
             else -> {
                 Log.w("HealthDataFragment", "Unsupported type=$testType, raw data=$resultMap")

@@ -16,15 +16,26 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.smartringpro.mannaheal.workers.OtherVitalsSyncWorker
+import com.smartringpro.mannaheal.workers.TemperatureWorker
 import com.smartringpro.mannaheal.R
+import com.smartringpro.mannaheal.helper.AutoSyncHelper
 import com.smartringpro.mannaheal.model.ConnectEvent
 import com.smartringpro.mannaheal.util.ConnectionPreferences
+import com.smartringpro.mannaheal.util.UserAppDetailSender
+import com.smartringpro.mannaheal.workers.AutoSyncWorker
 import com.yucheng.ycbtsdk.Constants.BLEState
 import com.yucheng.ycbtsdk.YCBTClient
 import com.yucheng.ycbtsdk.response.BleConnectResponse
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.concurrent.TimeUnit
 
 class BackgroundService : Service() {
     private var macAddress: String? = null
@@ -37,6 +48,8 @@ class BackgroundService : Service() {
 
     private var isManualDisconnect = false
     private var isBleConnected: Boolean = false
+
+    private var isTaskRunning = false
 
     override fun onCreate() {
         super.onCreate()
@@ -94,11 +107,60 @@ class BackgroundService : Service() {
 
         if (isBleConnected) {
             startForegroundServiceNotification("Connected to $macName", true)
+            startRepeatingTask()
         } else {
             startForegroundServiceNotification("Device not connected", false)
         }
 
         return START_STICKY
+    }
+
+    private fun startRepeatingTask() {
+        if (!isTaskRunning) {
+            isTaskRunning = true
+
+            startAutoSyncWorkers()
+        }
+    }
+
+    private fun startAutoSyncWorkers() {
+        val networkConstraint = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+        // 15-min Heart Rate Worker
+        val heartRateWork = PeriodicWorkRequestBuilder<AutoSyncWorker>(15, TimeUnit.MINUTES)
+            .setConstraints(networkConstraint)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "HeartRateSyncWork",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            heartRateWork
+        )
+
+        // 1-hour Other Vitals Worker
+        val otherVitalsWork = PeriodicWorkRequestBuilder<OtherVitalsSyncWorker>(1, TimeUnit.HOURS)
+            .setConstraints(networkConstraint)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "OtherVitalsSyncWork",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            otherVitalsWork
+        )
+
+        // 3-hour Temperature Worker
+        val temperatureWork = PeriodicWorkRequestBuilder<TemperatureWorker>(3, TimeUnit.HOURS)
+            .setConstraints(networkConstraint)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "TemperatureWork",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            temperatureWork
+        )
     }
 
     private fun disconnectAndStop() {
@@ -160,20 +222,20 @@ class BackgroundService : Service() {
 
         }
     }
+
     private val bleConnectCallback = BleConnectResponse { code ->
         Log.i("Device Service", "BLE state changed: $code")
 
         when (code) {
-            10 -> {
+            BLEState.ReadWriteOK -> {
                 Log.i("Device Service", "Device connected")
-
             }
 
-            3 -> {
+            BLEState.Disconnect -> {
                 Log.i("Device Service", "Device disconnected")
             }
 
-            5 -> {
+            BLEState.Connecting -> {
                 Log.i("Device Service", "Connecting...")
             }
 
@@ -185,10 +247,12 @@ class BackgroundService : Service() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onBleConnectEvent(event: ConnectEvent) {
-        isBleConnected = event.state == 1
+        val state = event.state
+        Log.i("Device Service callback", "Received ConnectEvent: state=$state")
 
-        when (event.state) {
+        when (state) {
             1 -> { // Connected
+                isBleConnected = true
                 Log.i("Device Service callback", "Device connected")
                 ConnectionPreferences.saveConnectionState(
                     applicationContext,
@@ -197,19 +261,28 @@ class BackgroundService : Service() {
                     macName
                 )
                 startForegroundServiceNotification("Connected to $macName", true)
+                startRepeatingTask()
+                UserAppDetailSender.sendUserAppDetail(applicationContext, false)
+
+                val autoSyncHelper = AutoSyncHelper(applicationContext)
+                autoSyncHelper.heartDataSync()
+
                 Toast.makeText(applicationContext, "Connected to $macName", Toast.LENGTH_SHORT).show()
             }
-            3 -> { // Disconnected
-                Log.i("Device Service callback", "Device disconnected")
+
+            0 -> { // Disconnected (out of range, battery, etc.)
+                isBleConnected = false
+                Log.i("Device Service callback", "Device disconnected (out of range / battery / other)")
                 startForegroundServiceNotification("Device not connected", false)
                 Toast.makeText(applicationContext, "Disconnected", Toast.LENGTH_SHORT).show()
             }
-            5 -> {
-            }
-            else -> {
+
+            else -> { // Any other state (optional logging)
+                Log.i("Device Service callback", "Other BLE state received: $state")
             }
         }
     }
+
     private fun startForegroundServiceNotification(
         connectionStatus: String,
         playSound: Boolean = false

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.smartringpro.mannaheal.R
 import com.smartringpro.mannaheal.databinding.FragmentSleepBinding
 import com.yucheng.ycbtsdk.Constants
 import com.yucheng.ycbtsdk.YCBTClient
@@ -37,7 +36,7 @@ class SleepFragment : Fragment() {
     }
 
     private fun fetchSleepHistory() {
-        YCBTClient.healthHistoryData(0x0504, object : BleDataResponse {
+        YCBTClient.healthHistoryData(Constants.DATATYPE.Health_HistorySleep, object : BleDataResponse {
             override fun onDataResponse(
                 responseCode: Int,
                 ratio: Float,

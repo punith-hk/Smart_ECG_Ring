@@ -127,7 +127,7 @@ class AutoTestConfigSyncHelper(
             }
             "blood_pressure" -> {
                 YCBTClient.settingBloodPressureMonitor(
-                    0x01,
+                    284,
                     ringConfig.interval,
                     object : BleDataResponse {
                         override fun onDataResponse(i: Int, v: Float, hashMap: HashMap<*, *>?) {

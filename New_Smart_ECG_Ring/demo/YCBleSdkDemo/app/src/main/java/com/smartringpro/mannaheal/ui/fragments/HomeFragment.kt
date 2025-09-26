@@ -30,6 +30,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        isBleConnected = YCBTClient.connectState() == BLEState.ReadWriteOK
+
         val sharedPreferences: SharedPreferences =
             requireContext().getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
         tempUnit =
@@ -40,8 +43,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        isBleConnected = YCBTClient.connectState() == BLEState.ReadWriteOK
 
         val sharedPreferences: SharedPreferences =
             requireContext().getSharedPreferences("UserPreferences", Context.MODE_PRIVATE)
@@ -120,6 +121,8 @@ class HomeFragment : Fragment() {
 //                getLastData()
 //            }
 //        }
+
+        isBleConnected()
     }
 
     private fun applyTemperatureUnit(data: Float, ambient: Boolean = false): String {
@@ -263,6 +266,15 @@ class HomeFragment : Fragment() {
             Glide.with(requireContext()).load(stressImageUri).into(binding.stressIcon)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun isBleConnected(): Boolean {
+        return if (isBleConnected) {
+            true
+        } else {
+            Toast.makeText(activity, getString(R.string.str_toast_no_device), Toast.LENGTH_LONG ).show()
+            false
         }
     }
 

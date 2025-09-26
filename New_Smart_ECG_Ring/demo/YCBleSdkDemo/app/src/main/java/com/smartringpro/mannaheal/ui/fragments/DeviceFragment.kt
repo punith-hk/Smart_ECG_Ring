@@ -276,14 +276,10 @@ class DeviceFragment : Fragment() {
     fun onBleConnectEvent(event: ConnectEvent) {
         isBleConnected = event.state == 1
 
-        Log.i("Device fragment callback", "${event.state}")
+        Log.i("Device fragment callback", "BLE state=${event.state}")
 
         when (event.state) {
-            0 -> { // Disconnecting
-                binding.connectionStatus.text = "Disconnecting..."
-            }
             1 -> { // Connected
-                Log.i("Device fragment callback", "Device connected")
                 binding.connectionStatus.text = "Connected"
                 setupBatteryInfo()
                 setUpFirmWare()
@@ -293,16 +289,8 @@ class DeviceFragment : Fragment() {
                     deviceMacAddress,
                     deviceName
                 )
-//                Toast.makeText(requireContext(), "Connected to $deviceName", Toast.LENGTH_SHORT).show()
             }
-            3 -> { // Disconnected
-                binding.connectionStatus.text = "Disconnected"
-                Toast.makeText(requireContext(), "Disconnected", Toast.LENGTH_SHORT).show()
-            }
-            5 -> { // Connecting
-                binding.connectionStatus.text = "Connecting..."
-            }
-            else -> {
+            else -> { // Anything else
                 binding.connectionStatus.text = "Device not found"
             }
         }

@@ -170,7 +170,7 @@
     <string name="rtk_dfu_toast_bt_not_enabled">蓝牙未打开</string>
     <string name="rtk_dfu_toast_connect_device">正在与设备：%1$s建立连接，请稍等片刻…</string>
     <string name="rtk_dfu_toast_operation_failed">操作失败</string>
-    <string name="rtk_dfu_toast_no_device">设备未连接</string>
+    <string name="str_toast_no_device">设备未连接</string>
 
     <string name="rtk_dfu_fc_undefined">未定义</string>
     <string name="rtk_dfu_fc_pack_loss">没有找到可升级的文件</string>
