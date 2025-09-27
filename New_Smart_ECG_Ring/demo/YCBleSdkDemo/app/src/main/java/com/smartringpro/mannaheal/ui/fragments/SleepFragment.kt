@@ -56,18 +56,19 @@ class SleepFragment : Fragment() {
                 }
 
                 dataList.forEach { item ->
-                    val startTime = (item["sleepStartTime"] as? Long)?.let {
-                        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                            .format(Date(it))
-                    }
-                    val duration = item["sleepDuration"] as? Int
-                    val sleepState = item["sleepState"] as? Int
+                    val sleepDataList = item["sleepData"] as? List<HashMap<String, Any>>
+                    sleepDataList?.forEach { sleepItem ->
+                        val startTime = (sleepItem["sleepStartTime"] as? Long)?.let {
+                            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                                .format(Date(it))
+                        }
+                        val duration = sleepItem["sleepLen"] as? Int
+                        val sleepState = sleepItem["sleepType"] as? Int
 
-                    Log.i(
-                        TAG,
-                        "Sleep -> Start=$startTime, Duration=$duration min, State=$sleepState"
-                    )
+                        Log.i(TAG, "Sleep -> Start=$startTime, Duration=$duration min, State=$sleepState")
+                    }
                 }
+
             }
         })
     }
