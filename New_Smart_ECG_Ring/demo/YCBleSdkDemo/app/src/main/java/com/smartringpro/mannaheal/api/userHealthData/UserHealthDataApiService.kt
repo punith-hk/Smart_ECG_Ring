@@ -1,6 +1,7 @@
 package com.smartringpro.mannaheal.api.userHealthData
 
 //import com.vanzoo.ble.bean.SleepBean
+import com.smartringpro.mannaheal.ui.fragments.SleepBean
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -47,7 +48,7 @@ interface UserHealthDataApiService {
     @POST("CreateSleepData")
     fun saveSleepData(
         @Query("user_id") userId: Int,
-//        @Body sleepBean: SleepBean
+        @Body sleepBean: SleepBean
     ): Call<Void>
 
 

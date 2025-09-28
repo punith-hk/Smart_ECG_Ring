@@ -1,7 +1,7 @@
 package com.smartringpro.mannaheal.api.userHealthData
 
-//import com.vanzoo.ble.bean.SleepBean
 import com.smartringpro.mannaheal.api.UserDataApiClient
+import com.smartringpro.mannaheal.ui.fragments.SleepBean
 import retrofit2.Call
 
 class UserHealthDataRepository {
@@ -20,9 +20,9 @@ class UserHealthDataRepository {
     fun getHealthDataByDay(userId: Int, type: String): Call<GetUserHealthDataByDayResponse> {
         return healthDataApi.getHealthRateDatabyDay(userId, type)
     }
-//    fun saveSleepData(userId: Int, sleepData: SleepBean): Call<Void> {
-//        return healthDataApi.saveSleepData(userId, sleepData)
-//    }
+    fun saveSleepData(userId: Int, sleepData: SleepBean): Call<Void> {
+        return healthDataApi.saveSleepData(userId, sleepData)
+    }
     fun getSleepData(userId: Int): Call<SleepResponse> {
         return healthDataApi.getSleepData(userId)
     }
