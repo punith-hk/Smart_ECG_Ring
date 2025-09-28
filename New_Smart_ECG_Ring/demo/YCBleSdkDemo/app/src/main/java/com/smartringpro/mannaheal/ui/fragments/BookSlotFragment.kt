@@ -18,7 +18,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
-//import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -57,7 +57,7 @@ class BookSlotFragment : Fragment(), SlotClickListener {
     private val binding get() = _binding!!
     private val dBinding get() = _dBinding!!
     private val SpecializationRepository = SpecializationRepository()
-//    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private var selectedDoctor: Doctor? = null
     private var appointment_date: String? = null
     private var appointment_time: String? = null
@@ -268,33 +268,33 @@ class BookSlotFragment : Fragment(), SlotClickListener {
 
     private fun setDoctorDetails() {
 
-//        binding.doctorCard.bookNow.visibility = View.GONE
-//        sharedViewModel.doctorData.observe(viewLifecycleOwner, Observer { data ->
-//            // Update your UI with the shared data
-//            selectedDoctor = data
-//            binding.doctorCard.doctorName.text = data.doctor_name
-//            binding.doctorCard.doctorsDegree.text = data.education
-//            binding.doctorCard.doctorsSpecialization.text = data.doctor_department
-//            val address = "${data.city}, ${data.state}, ${data.country}"
-//            val textView = TextView(context)
-//            textView.text = address
-//            TextViewCompat.setTextAppearance(textView, R.style.bind_the_de)
-//            textView.layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-////            binding.doctorCard.subtextLayout.addView(textView)
-//
-//            val imageUri: Uri = Uri.parse(data.doctor_image_url)
-//            try {
-//                Glide.with(requireContext())
-//                    .load(imageUri)
-//                    .into(binding.doctorCard.doctorImageIcon)
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//            setDoctorAppointments()
-//        })
+        binding.doctorCard.bookNow.visibility = View.GONE
+        sharedViewModel.doctorData.observe(viewLifecycleOwner, Observer { data ->
+            // Update your UI with the shared data
+            selectedDoctor = data
+            binding.doctorCard.doctorName.text = data.doctor_name
+            binding.doctorCard.doctorsDegree.text = data.education
+            binding.doctorCard.doctorsSpecialization.text = data.doctor_department
+            val address = "${data.city}, ${data.state}, ${data.country}"
+            val textView = TextView(context)
+            textView.text = address
+            TextViewCompat.setTextAppearance(textView, R.style.bind_the_de)
+            textView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+//            binding.doctorCard.subtextLayout.addView(textView)
+
+            val imageUri: Uri = Uri.parse(data.doctor_image_url)
+            try {
+                Glide.with(requireContext())
+                    .load(imageUri)
+                    .into(binding.doctorCard.doctorImageIcon)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            setDoctorAppointments()
+        })
 
     }
 

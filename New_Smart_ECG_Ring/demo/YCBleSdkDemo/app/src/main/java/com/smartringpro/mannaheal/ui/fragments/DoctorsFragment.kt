@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-//import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.activityViewModels
 import com.smartringpro.mannaheal.adapter.DoctorListAdapter
 import com.smartringpro.mannaheal.adapter.OnItemClickListener
 import com.smartringpro.mannaheal.api.register.SpecializationRepository
@@ -25,7 +25,7 @@ class DoctorsFragment : Fragment(), OnItemClickListener {
     private val binding get() = _binding!!
     private lateinit var doctorsList: List<Doctor>
     private val SpecializationRepository = SpecializationRepository()
-//    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,7 +69,7 @@ class DoctorsFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(position: Int) {
-//        sharedViewModel.setDoctorData(doctorsList[position])
+        sharedViewModel.setDoctorData(doctorsList[position])
         val clickedId = doctorsList[position].id
         val fragment = SymptomsFragment()
         val bundle = Bundle()

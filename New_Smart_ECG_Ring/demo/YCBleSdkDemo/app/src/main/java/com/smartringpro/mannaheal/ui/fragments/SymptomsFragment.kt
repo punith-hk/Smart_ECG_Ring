@@ -27,7 +27,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
-//import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
@@ -87,7 +87,7 @@ class SymptomsFragment : Fragment() {
 
     private var maxSymptomSelection = 8
 
-//    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -717,27 +717,27 @@ class SymptomsFragment : Fragment() {
     }
 
     private fun setDoctorDetails() {
-//        sharedViewModel.doctorData.observe(viewLifecycleOwner, Observer { data ->
-//            // Update your UI with the shared data
-//            doctorName.text = data.doctor_name
-//            doctorsDegree.text = data.education
-//            doctorSpecialization.text = data.doctor_department
-//            val textView = TextView(context)
-//            TextViewCompat.setTextAppearance(textView, R.style.bind_the_de)
-//            textView.layoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-//
-//            val imageUri: Uri = Uri.parse(data.doctor_image_url)
-//            try {
-//                Glide.with(requireContext())
-//                    .load(imageUri)
-//                    .into(doctorImageIcon)
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        })
+        sharedViewModel.doctorData.observe(viewLifecycleOwner, Observer { data ->
+            // Update your UI with the shared data
+            doctorName.text = data.doctor_name
+            doctorsDegree.text = data.education
+            doctorSpecialization.text = data.doctor_department
+            val textView = TextView(context)
+            TextViewCompat.setTextAppearance(textView, R.style.bind_the_de)
+            textView.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            val imageUri: Uri = Uri.parse(data.doctor_image_url)
+            try {
+                Glide.with(requireContext())
+                    .load(imageUri)
+                    .into(doctorImageIcon)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        })
 
     }
 }
